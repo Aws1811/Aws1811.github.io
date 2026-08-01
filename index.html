@@ -1,38 +1,855 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>DOM</title>
-        <link rel="stylesheet" href="style.css">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Aws Sleebi — Full-Stack Developer</title>
+        <meta
+            name="description"
+            content="Junior full-stack developer based in Ramallah, Palestine. Java, Python, JavaScript. Builder of HerjaHub, a marketplace for Palestinian artisans."
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            :root {
+                --ink: #15120f;
+                --ink-2: #1b1714;
+                --panel: #221c18;
+                --bone: #efe7da;
+                --bone-dim: #a2968a;
+                --madder: #c24a3c;
+                --olive: #93a06a;
+                --line: rgba(239, 231, 218, 0.13);
+                --line-soft: rgba(239, 231, 218, 0.07);
+
+                --display: "Fraunces", Georgia, serif;
+                --body: "IBM Plex Sans", system-ui, sans-serif;
+                --mono: "IBM Plex Mono", ui-monospace, monospace;
+
+                --pad: clamp(1.25rem, 5vw, 5.5rem);
+                --maxw: 1120px;
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+            html {
+                scroll-behavior: smooth;
+            }
+            body {
+                margin: 0;
+                background: var(--ink);
+                color: var(--bone);
+                font-family: var(--body);
+                font-size: 16px;
+                line-height: 1.62;
+                -webkit-font-smoothing: antialiased;
+            }
+            a {
+                color: inherit;
+            }
+            ::selection {
+                background: var(--madder);
+                color: var(--bone);
+            }
+            :focus-visible {
+                outline: 2px solid var(--olive);
+                outline-offset: 3px;
+                border-radius: 2px;
+            }
+
+            .wrap {
+                max-width: var(--maxw);
+                margin: 0 auto;
+                padding-inline: var(--pad);
+            }
+
+            .eyebrow {
+                font-family: var(--mono);
+                font-size: 0.7rem;
+                letter-spacing: 0.19em;
+                text-transform: uppercase;
+                color: var(--bone-dim);
+                margin: 0;
+            }
+            .eyebrow .mark {
+                color: var(--madder);
+            }
+
+            /* ---------- HERO ---------- */
+            .hero {
+                padding-block: clamp(3.5rem, 11vh, 7rem)
+                    clamp(2.5rem, 7vh, 4.5rem);
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) auto;
+                gap: clamp(2rem, 6vw, 5rem);
+                align-items: center;
+            }
+            .hero h1 {
+                font-family: var(--display);
+                font-weight: 600;
+                font-size: clamp(3rem, 9.5vw, 6.6rem);
+                line-height: 0.94;
+                letter-spacing: -0.03em;
+                margin: 0.55rem 0 0;
+                font-variation-settings:
+                    "SOFT" 20,
+                    "WONK" 1;
+            }
+            .hero h1 em {
+                font-style: italic;
+                color: var(--madder);
+                font-variation-settings:
+                    "SOFT" 40,
+                    "WONK" 1;
+            }
+            .lede {
+                font-size: clamp(1.02rem, 1.65vw, 1.2rem);
+                color: var(--bone);
+                max-width: 47ch;
+                margin: 1.6rem 0 0;
+            }
+            .lede .quiet {
+                color: var(--bone-dim);
+            }
+
+            .actions {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.65rem;
+                margin-top: 2.1rem;
+            }
+            .btn {
+                font-family: var(--mono);
+                font-size: 0.78rem;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                text-decoration: none;
+                padding: 0.72rem 1.15rem;
+                border: 1px solid var(--line);
+                color: var(--bone);
+                transition:
+                    border-color 0.22s,
+                    color 0.22s,
+                    background 0.22s;
+            }
+            .btn:hover {
+                border-color: var(--bone-dim);
+            }
+            .btn.primary {
+                background: var(--madder);
+                border-color: var(--madder);
+                color: #1a0f0c;
+                font-weight: 500;
+            }
+            .btn.primary:hover {
+                background: #d3574a;
+                border-color: #d3574a;
+            }
+
+            #stitch-hero {
+                display: block;
+                height: auto;
+                width: clamp(120px, 17vw, 215px);
+            }
+
+            /* ---------- BANDS + SECTIONS ---------- */
+            .band {
+                width: 100%;
+                height: 26px;
+                display: block;
+                opacity: 0.5;
+            }
+            .section {
+                padding-block: clamp(3.2rem, 8vh, 5.5rem);
+            }
+            .section-head {
+                display: flex;
+                align-items: baseline;
+                gap: 1rem;
+                border-bottom: 1px solid var(--line);
+                padding-bottom: 0.85rem;
+                margin-bottom: 2.4rem;
+            }
+            .section-head h2 {
+                font-family: var(--display);
+                font-weight: 500;
+                font-size: clamp(1.5rem, 3.4vw, 2.15rem);
+                letter-spacing: -0.02em;
+                margin: 0;
+                font-variation-settings: "SOFT" 15;
+            }
+            .section-head .count {
+                font-family: var(--mono);
+                font-size: 0.72rem;
+                color: var(--bone-dim);
+                margin-left: auto;
+                letter-spacing: 0.1em;
+            }
+
+            /* ---------- WORK ---------- */
+            .project {
+                background: var(--ink-2);
+                border: 1px solid var(--line);
+                padding: clamp(1.4rem, 3.5vw, 2.6rem);
+            }
+            .project + .project {
+                margin-top: 1.15rem;
+            }
+            .project-top {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: baseline;
+                gap: 0.6rem 1rem;
+                margin-bottom: 0.5rem;
+            }
+            .project h3 {
+                font-family: var(--display);
+                font-weight: 600;
+                font-size: clamp(1.35rem, 3vw, 1.85rem);
+                letter-spacing: -0.02em;
+                margin: 0;
+            }
+            .role {
+                font-family: var(--mono);
+                font-size: 0.68rem;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+                color: var(--olive);
+                border: 1px solid rgba(147, 160, 106, 0.35);
+                padding: 0.24rem 0.55rem;
+            }
+            .project .summary {
+                color: var(--bone-dim);
+                max-width: 66ch;
+                margin: 0.5rem 0 1.5rem;
+            }
+            .did {
+                list-style: none;
+                padding: 0;
+                margin: 0 0 1.6rem;
+                display: grid;
+                gap: 0.72rem;
+            }
+            .did li {
+                position: relative;
+                padding-left: 1.6rem;
+                max-width: 70ch;
+            }
+            .did li::before {
+                content: "";
+                position: absolute;
+                left: 0;
+                top: 0.62em;
+                width: 7px;
+                height: 7px;
+                background: var(--madder);
+                /* a single cross-stitch */
+                clip-path: polygon(
+                    0 0,
+                    35% 0,
+                    50% 30%,
+                    65% 0,
+                    100% 0,
+                    65% 50%,
+                    100% 100%,
+                    65% 100%,
+                    50% 70%,
+                    35% 100%,
+                    0 100%,
+                    35% 50%
+                );
+            }
+            .did strong {
+                font-weight: 600;
+                color: var(--bone);
+            }
+
+            .tags {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.4rem;
+                margin-bottom: 1.5rem;
+            }
+            .tag {
+                font-family: var(--mono);
+                font-size: 0.7rem;
+                color: var(--bone-dim);
+                border: 1px solid var(--line);
+                padding: 0.28rem 0.6rem;
+            }
+            .links {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 1.4rem;
+            }
+            .links a {
+                font-family: var(--mono);
+                font-size: 0.78rem;
+                letter-spacing: 0.05em;
+                text-decoration: none;
+                border-bottom: 1px solid var(--line);
+                padding-bottom: 2px;
+                transition:
+                    border-color 0.2s,
+                    color 0.2s;
+            }
+            .links a:hover {
+                border-color: var(--madder);
+                color: var(--madder);
+            }
+            .links a .arr {
+                color: var(--madder);
+            }
+
+            /* ---------- STACK ---------- */
+            .stack {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+                gap: 1px;
+                background: var(--line-soft);
+                border: 1px solid var(--line-soft);
+            }
+            .stack div {
+                background: var(--ink);
+                padding: 1.4rem 1.5rem;
+            }
+            .stack h4 {
+                font-family: var(--mono);
+                font-size: 0.7rem;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                color: var(--madder);
+                margin: 0 0 0.85rem;
+                font-weight: 500;
+            }
+            .stack ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                display: grid;
+                gap: 0.34rem;
+            }
+            .stack li {
+                font-size: 0.94rem;
+                color: var(--bone-dim);
+            }
+
+            /* ---------- TRAINING ---------- */
+            .training {
+                display: grid;
+                grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+                gap: clamp(1.5rem, 5vw, 3.5rem);
+            }
+            .training h3 {
+                font-family: var(--display);
+                font-size: 1.5rem;
+                font-weight: 600;
+                margin: 0.4rem 0 0.3rem;
+                letter-spacing: -0.02em;
+            }
+            .training .when {
+                font-family: var(--mono);
+                font-size: 0.76rem;
+                color: var(--bone-dim);
+            }
+            .training p {
+                color: var(--bone-dim);
+                margin: 0 0 1.2rem;
+            }
+            .tracks {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                border-top: 1px solid var(--line);
+            }
+            .tracks li {
+                display: flex;
+                gap: 1.2rem;
+                padding: 0.78rem 0;
+                border-bottom: 1px solid var(--line);
+                font-size: 0.95rem;
+            }
+            .tracks .no {
+                font-family: var(--mono);
+                font-size: 0.74rem;
+                color: var(--madder);
+                padding-top: 0.15rem;
+                flex-shrink: 0;
+            }
+            .tracks .what {
+                color: var(--bone-dim);
+            }
+            .tracks .what b {
+                color: var(--bone);
+                font-weight: 600;
+            }
+
+            /* ---------- CONTACT ---------- */
+            .contact {
+                padding-block: clamp(3.5rem, 9vh, 6rem);
+                text-align: center;
+            }
+            .contact h2 {
+                font-family: var(--display);
+                font-size: clamp(1.9rem, 5.5vw, 3.3rem);
+                font-weight: 500;
+                letter-spacing: -0.025em;
+                margin: 0.7rem 0 1.4rem;
+                font-variation-settings:
+                    "SOFT" 25,
+                    "WONK" 1;
+            }
+            .contact .mail {
+                font-family: var(--body);
+                font-size: clamp(1rem, 2.4vw, 1.35rem);
+                color: var(--madder);
+                text-decoration: none;
+                border-bottom: 1px solid rgba(194, 74, 60, 0.4);
+                padding-bottom: 3px;
+            }
+            .contact .mail:hover {
+                border-color: var(--madder);
+            }
+            .elsewhere {
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 1.6rem;
+                margin-top: 2.2rem;
+            }
+            .elsewhere a {
+                font-family: var(--mono);
+                font-size: 0.76rem;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                color: var(--bone-dim);
+                text-decoration: none;
+                transition: color 0.2s;
+            }
+            .elsewhere a:hover {
+                color: var(--bone);
+            }
+
+            footer {
+                border-top: 1px solid var(--line);
+                padding-block: 1.6rem 2.2rem;
+                font-family: var(--mono);
+                font-size: 0.7rem;
+                color: var(--bone-dim);
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                letter-spacing: 0.06em;
+            }
+
+            /* ---------- STITCH ANIMATION ---------- */
+            .stitch {
+                opacity: 0;
+            }
+            .stitch.on {
+                opacity: 1;
+                transition: opacity 0.34s ease-out;
+            }
+
+            @media (max-width: 760px) {
+                .hero {
+                    grid-template-columns: 1fr;
+                }
+                #stitch-hero {
+                    width: 132px;
+                }
+                .training {
+                    grid-template-columns: 1fr;
+                }
+            }
+            @media (prefers-reduced-motion: reduce) {
+                html {
+                    scroll-behavior: auto;
+                }
+                .stitch {
+                    opacity: 1;
+                }
+                .stitch.on {
+                    transition: none;
+                }
+                * {
+                    animation: none !important;
+                }
+            }
+        </style>
     </head>
     <body>
-        <!-- hidden images -->
-        <figure><img src="07bef6a0925637f83ed8d7588fccee6d.jpg"></figure>
-        <div class="big-bro"><img src="c46531d3d22bad2e9d9ccb9e76c808ac.jpg"></div>
-        <div class="little-bro"><img src="61e39e00865a39454ba0ef6051d42bb8.jpg"></div>
-        <div class="cat"><img src="e5603a3903611ca9c537708c5862e129.jpg"></div>
-        <div class="dad"><img src="1bce212f57b820333dbf86443a388c4d.jpg"></div>
-        <main>
-            <!-- pablo family -->
-            <h1>Pablo Family</h1>
-            <div class="family">
-                    <p>Pablo Sister</p>
-                    <p>Pablo Big Bro</p>
-                    <p id="pablo"> ----- Pablo ----- </p>
-                    <p>Pablo Little Bro</p>
-                    <p> Pablo Cat</p>
-            </div> 
-            <!-- call pablo family -->
-            <div class="call-family">
-                <button>Pablo Bros</button>
-                <button>Pablo Sister</button>
-                <button>where is Pablo?</button>
-                <button>Pablo Cat</button>
-                <button>Pablo Father</button>
+        <header class="wrap hero">
+            <div>
+                <p class="eyebrow">
+                    Ramallah, Palestine
+                    <span class="mark">&#10005;</span> Full-Stack Developer
+                </p>
+                <h1>Aws<br />Sleebi</h1>
+                <p class="lede">
+                    I build web applications across Java, Python, and
+                    JavaScript.
+                    <span class="quiet"
+                        >My first real project was a storefront for Palestinian
+                        artisans &mdash; people whose work deserves to be
+                        found.</span
+                    >
+                </p>
+                <div class="actions">
+                    <a class="btn primary" href="#work">See the work</a>
+                    <a class="btn" href="Aws_Sleebi_CV.pdf">Download CV</a>
+                    <a class="btn" href="https://github.com/Aws1811">GitHub</a>
+                </div>
             </div>
-            <h2>Pablo?</h2>
+            <svg
+                id="stitch-hero"
+                viewBox="0 0 100 200"
+                aria-hidden="true"
+            ></svg>
+        </header>
+
+        <svg
+            class="band"
+            viewBox="0 0 240 26"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+        >
+            <defs>
+                <pattern
+                    id="chev"
+                    width="24"
+                    height="26"
+                    patternUnits="userSpaceOnUse"
+                >
+                    <g fill="#C24A3C">
+                        <rect x="10" y="2" width="4" height="4" />
+                        <rect x="6" y="6" width="4" height="4" />
+                        <rect x="14" y="6" width="4" height="4" />
+                        <rect x="2" y="10" width="4" height="4" />
+                        <rect x="18" y="10" width="4" height="4" />
+                        <rect x="6" y="14" width="4" height="4" />
+                        <rect x="14" y="14" width="4" height="4" />
+                        <rect x="10" y="18" width="4" height="4" />
+                    </g>
+                </pattern>
+            </defs>
+            <rect width="240" height="26" fill="url(#chev)" />
+        </svg>
+
+        <main>
+            <!-- WORK -->
+            <section class="wrap section" id="work">
+                <div class="section-head">
+                    <h2>Selected work</h2>
+                    <span class="count">02</span>
+                </div>
+
+                <article class="project">
+                    <div class="project-top">
+                        <h3>HerjaHub</h3>
+                        <span class="role"
+                            >Team project &middot; my scope below</span
+                        >
+                    </div>
+                    <p class="summary">
+                        A multi-vendor marketplace for Palestinian artisans.
+                        Craftspeople here make work worth buying but have almost
+                        no way to be found online, so sales stay local and
+                        small. HerjaHub gives an artisan a storefront, a product
+                        catalogue, and a direct line to customers.
+                    </p>
+                    <ul class="did">
+                        <li>
+                            <strong>Front-end, all of it.</strong> Designed and
+                            built every screen in JSP with hand-written CSS
+                            &mdash; no framework, no component library.
+                        </li>
+                        <li>
+                            <strong>The customer side, end to end.</strong>
+                            Product catalogue, store directory, search, cart,
+                            order history, and profile management.
+                        </li>
+                        <li>
+                            <strong>Role-based access.</strong> Separate
+                            permissions for customers and store owners, with
+                            registration, login, and real 401 / 403 / 404 pages
+                            instead of raw server errors.
+                        </li>
+                        <li>
+                            <strong>AI-assisted search.</strong> Integrated an
+                            assistant so customers can describe what they want
+                            instead of guessing keywords.
+                        </li>
+                        <li>
+                            <strong>Repository owner.</strong> Set the branching
+                            workflow for the team, reviewed incoming branches,
+                            and resolved the merge conflicts.
+                        </li>
+                        <li>
+                            <strong>Deployment.</strong> Shipped it to an AWS
+                            EC2 instance running Apache Tomcat.
+                        </li>
+                    </ul>
+                    <div class="tags">
+                        <span class="tag">Java</span><span class="tag">JSP</span
+                        ><span class="tag">CSS</span>
+                        <span class="tag">MySQL</span
+                        ><span class="tag">AWS EC2</span
+                        ><span class="tag">Apache Tomcat</span>
+                    </div>
+                    <div class="links">
+                        <a href="https://github.com/Aws1811/HerjaHub"
+                            >Source on GitHub
+                            <span class="arr">&#8594;</span></a
+                        >
+                    </div>
+                </article>
+
+                <article class="project">
+                    <div class="project-top">
+                        <h3>Bootcamp archive</h3>
+                        <span class="role">192 commits</span>
+                    </div>
+                    <p class="summary">
+                        Every assignment from my time at Axsos Academy, kept in
+                        the open across six tracks: web fundamentals, Python,
+                        Java, MERN, MySQL, and deployment. The commit history is
+                        the honest version of how I learned this &mdash; first
+                        HTML page through to full back-end applications.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">Java 38.7%</span
+                        ><span class="tag">Python 21.3%</span>
+                        <span class="tag">HTML 20.1%</span
+                        ><span class="tag">CSS 13%</span
+                        ><span class="tag">JavaScript 6.8%</span>
+                    </div>
+                    <div class="links">
+                        <a href="https://github.com/Aws1811/axsos-boot-camp"
+                            >Browse the repository
+                            <span class="arr">&#8594;</span></a
+                        >
+                        <a href="https://github.com/Aws1811/Algorithms"
+                            >Algorithms &amp; data structures
+                            <span class="arr">&#8594;</span></a
+                        >
+                    </div>
+                </article>
+            </section>
+
+            <!-- STACK -->
+            <section class="wrap section" id="stack">
+                <div class="section-head">
+                    <h2>What I work with</h2>
+                </div>
+                <div class="stack">
+                    <div>
+                        <h4>Languages</h4>
+                        <ul>
+                            <li>Java</li>
+                            <li>Python</li>
+                            <li>JavaScript</li>
+                            <li>SQL</li>
+                            <li>HTML5 &amp; CSS3</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Frameworks</h4>
+                        <ul>
+                            <li>Spring Boot</li>
+                            <li>Django</li>
+                            <li>Flask</li>
+                            <li>React</li>
+                            <li>Node.js &amp; Express</li>
+                            <li>JSP</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Data</h4>
+                        <ul>
+                            <li>MySQL</li>
+                            <li>MongoDB</li>
+                            <li>Schema design</li>
+                            <li>MySQL Workbench</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Tools &amp; practice</h4>
+                        <ul>
+                            <li>Git &amp; GitHub</li>
+                            <li>AWS EC2</li>
+                            <li>Apache Tomcat</li>
+                            <li>IntelliJ IDEA</li>
+                            <li>MVC &amp; REST APIs</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TRAINING -->
+            <section class="wrap section" id="training">
+                <div class="section-head">
+                    <h2>Training</h2>
+                </div>
+                <div class="training">
+                    <div>
+                        <p class="when">[START DATE] &ndash; [END DATE]</p>
+                        <h3>Axsos Academy</h3>
+                        <p class="when">
+                            Full-Stack Development Program &middot; Ramallah
+                        </p>
+                    </div>
+                    <div>
+                        <p>
+                            Four production stacks, built one after the other,
+                            alongside continuous algorithm practice and
+                            technical interview preparation. Certificate
+                            expected [MONTH YEAR].
+                        </p>
+                        <ul class="tracks">
+                            <li>
+                                <span class="no">01</span
+                                ><span class="what"
+                                    ><b>Web fundamentals</b> &mdash; HTML, CSS,
+                                    JavaScript</span
+                                >
+                            </li>
+                            <li>
+                                <span class="no">02</span
+                                ><span class="what"
+                                    ><b>Python</b> &mdash; Flask and
+                                    Django</span
+                                >
+                            </li>
+                            <li>
+                                <span class="no">03</span
+                                ><span class="what"
+                                    ><b>Java</b> &mdash; Spring Boot</span
+                                >
+                            </li>
+                            <li>
+                                <span class="no">04</span
+                                ><span class="what"
+                                    ><b>MERN</b> &mdash; MongoDB, Express,
+                                    React, Node.js</span
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
         </main>
-        <script src="script.js"></script>
+
+        <svg
+            class="band"
+            viewBox="0 0 240 26"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+        >
+            <rect width="240" height="26" fill="url(#chev)" />
+        </svg>
+
+        <section class="wrap contact" id="contact">
+            <p class="eyebrow">Open to junior developer roles</p>
+            <h2>Let's build something.</h2>
+            <a class="mail" href="mailto:aws97801@gmail.com"
+                >aws97801@gmail.com</a
+            >
+            <div class="elsewhere">
+                <a href="https://github.com/Aws1811">GitHub</a>
+                <a href="https://www.linkedin.com/in/aws-sleebi-9225583b3/"
+                    >LinkedIn</a
+                >
+                <a href="Aws_Sleebi_CV.pdf">CV (PDF)</a>
+            </div>
+        </section>
+
+        <footer class="wrap">
+            <span>Aws Sleebi &mdash; Ramallah, Palestine</span>
+            <span>Pattern after Palestinian tatreez</span>
+        </footer>
+
+        <script>
+            (function () {
+                // A tatreez diamond, one character per stitch.
+                var motif = [
+                    ".....#.....",
+                    "....#.#....",
+                    "...#...#...",
+                    "..#..#..#..",
+                    ".#..#.#..#.",
+                    "#..#...#..#",
+                    ".#..#.#..#.",
+                    "..#..#..#..",
+                    "...#...#...",
+                    "....#.#....",
+                    ".....#.....",
+                ];
+
+                var svg = document.getElementById("stitch-hero");
+                if (!svg) return;
+
+                var cell = 100 / motif[0].length; // stitch size
+                var reps = 2; // stack the motif vertically
+                var rows = motif.length * reps;
+                svg.setAttribute("viewBox", "0 0 100 " + rows * cell);
+
+                var ns = "http://www.w3.org/2000/svg";
+                var stitches = [];
+
+                for (var r = 0; r < rows; r++) {
+                    var line = motif[r % motif.length];
+                    for (var c = 0; c < line.length; c++) {
+                        if (line[c] !== "#") continue;
+                        var s = document.createElementNS(ns, "rect");
+                        s.setAttribute(
+                            "x",
+                            (c * cell + cell * 0.12).toFixed(2),
+                        );
+                        s.setAttribute(
+                            "y",
+                            (r * cell + cell * 0.12).toFixed(2),
+                        );
+                        s.setAttribute("width", (cell * 0.76).toFixed(2));
+                        s.setAttribute("height", (cell * 0.76).toFixed(2));
+                        s.setAttribute(
+                            "fill",
+                            (r % motif.length) % 4 === 0
+                                ? "#93A06A"
+                                : "#C24A3C",
+                        );
+                        s.setAttribute("class", "stitch");
+                        svg.appendChild(s);
+                        stitches.push(s);
+                    }
+                }
+
+                var still = window.matchMedia(
+                    "(prefers-reduced-motion: reduce)",
+                ).matches;
+                if (still) {
+                    stitches.forEach(function (s) {
+                        s.classList.add("on");
+                    });
+                    return;
+                }
+
+                // Embroider it in, stitch by stitch, the way it would be sewn.
+                stitches.forEach(function (s, i) {
+                    setTimeout(
+                        function () {
+                            s.classList.add("on");
+                        },
+                        320 + i * 11,
+                    );
+                });
+            })();
+        </script>
     </body>
 </html>
